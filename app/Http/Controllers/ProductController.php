@@ -32,10 +32,23 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+      // validazione dati
+      $validateData = $request->validate([
+        // required => "abbligatorio"
+        // max:numero di caratteri
+        // numeric => dev'essere un numero
+        // between:min, max => range d'inserimento numerico
+        'name' => 'required|max:255|bail',
+        'description' => 'required',
+        'price' => 'required|numeric|between:0, 999.99',
+      ]);
+
       // ritorna un array di dati
       $dati = $request->all();
 
       // dd($dati);
+
+      //istanzio un nuovo oggetto di tipo prodotto
       $nuovo_prodotto = new Product();
       // $nuovo_prodotto->name = $dati['name'];
       // $nuovo_prodotto->description = $dati['description'];
@@ -65,30 +78,65 @@ class ProductController extends Controller
       }
 
       return view('products.show', compact('product'));
+
+      //se si organizzano bene i nomi lo fa lui da solo cosi:
+      // public function show(Product $product)
+      // {
+      //
+      //   return view('products.show', compact('product'));
+      // }
+
     }
 
-    //se si organizzano bene i nomi lo fa lui da solo cosi:
-    // public function show(Product $product)
-    // {
-    //
-    //   return view('products.show', compact('product'));
-    // }
-
-
-    public function edit(Product $product)
+    public function edit($product_id)
     {
-        //
+      // con il metodo find cerco il prodotto in base all'id
+      $product = Product::find($product_id);
+      // dd($product_id);
+
+      // se il prodotto è NULL reindirizzo alla pagina 404
+      if (empty($product)) {
+        abort(404);
+      }
+
+      return view('products.edit', compact('product'));
+
     }
 
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $product_id)
     {
-        //
+      // validazione dati
+      $validateData = $request->validate([
+        'name' => 'required|max:255|bail',
+        'description' => 'required',
+        'price' => 'required|numeric|between:0, 999.99',
+      ]);
+
+      // ritorna un array di dati
+      $dati = $request->all();
+
+      // con il metodo find cerco il prodotto in base all'id
+      $product = Product::find($product_id);
+
+      // dd($dati);
+
+      // aggiorno il prodotto con il metodo update => fill e save insieme
+      $product->update($dati);
+      
+      // reindirizzo alla home
+      return redirect()->route('products.index');
+
     }
 
 
-    public function destroy(Product $product)
+    public function destroy($product_id)
     {
-        //
+      // con il metodo find cerco il prodotto in base all'id
+      $product = Product::find($product_id);
+      // metodo delete() cancella
+      $product->delete();
+      // reindirizzo alla home
+      return redirect()->route('products.index');
     }
 }

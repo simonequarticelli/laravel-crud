@@ -29,7 +29,17 @@
           <td>{{ $product->description }}</td>
           <td>{{ $product->price }}</td>
           {{-- con route nell'href imposto pagina da visualizzare e identifico con id --}}
-          <td class="text-center"><a href="{{ route('products.show', $product->id) }}" class="btn btn-info">Visualizza</a></td>
+          <td class="text-center">
+            <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Visualizza</a>
+            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-secondary">Modifica</a>
+            <form class="delete_product_form d-inline" action="{{ route('products.destroy', $product->id) }}" method="post">
+              {{-- specifico il metodo PUT --}}
+              @method('DELETE')
+              {{-- @csrf --> controllo validità form --}}
+              @csrf
+              <input class="btn btn-danger" type="submit" value="Cancella">
+            </form>
+          </td>
         </tr>
       @empty
         <tr>
