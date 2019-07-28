@@ -1,0 +1,14 @@
+<?php
+
+//cartella di lavoro
+namespace App;
+
+//mi serve altro fuori dalla cartella
+use Illuminate\Database\Eloquent\Model;
+
+//model (ogni model mappa una tabella del database)
+class Product extends Model
+{
+  //creo variabile protetta per impostare nome non in inglese
+  // protected $table = 'products';
+}

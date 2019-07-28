@@ -33,7 +33,7 @@
             <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Visualizza</a>
             <a href="{{ route('products.edit', $product->id) }}" class="btn btn-secondary">Modifica</a>
             <form class="delete_product_form d-inline" action="{{ route('products.destroy', $product->id) }}" method="post">
-              {{-- specifico il metodo PUT --}}
+              {{-- specifico il metodo DELETE --}}
               @method('DELETE')
               {{-- @csrf --> controllo validità form --}}
               @csrf
